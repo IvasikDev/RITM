@@ -2,7 +2,7 @@
 
 «Ритм» — тренажёр десятипальцевого набора для Windows. В версии 0.2.14 есть отдельные курсы для русской ЙЦУКЕН и английской QWERTY, демонстрация движений пальцев, диктант и история попыток с разбором ошибок.
 
-**[Скачать Ритм 0.2.14 для Windows](https://github.com/IvasikDev/RITM/releases/download/v0.2.14/Rhythm-0.2.14.exe)** · [Страница тестовой версии](https://github.com/IvasikDev/RITM/releases/tag/v0.2.14)
+**[Скачать Ритм 0.2.14 для Windows](https://github.com/IvasikDev/RITM/releases/download/v0.2.14/Rhythm-0.2.14.exe)** · [Страница релиза](https://github.com/IvasikDev/RITM/releases/tag/v0.2.14)
 
 Приложение запускается из EXE без установки. Для диктанта используется установленный в Windows голос для выбранного языка. Раскладку курса можно выбирать независимо от языка интерфейса.
 

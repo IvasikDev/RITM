@@ -1,0 +1,457 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Ритм — тренажёр слепой печати" Width="1210" Height="825" MinWidth="890" MinHeight="580"
+        WindowStartupLocation="CenterScreen" WindowState="Maximized" Foreground="#F3F8FF"
+        FontFamily="Segoe UI" FontSize="14" UseLayoutRounding="True" SnapsToDevicePixels="True"
+        TextOptions.TextFormattingMode="Display" xml:lang="ru-RU">
+    <Window.Background>
+        <RadialGradientBrush Center="0.87,0.12" GradientOrigin="0.87,0.12" RadiusX="1.02" RadiusY="1.25">
+            <GradientStop Color="#153F80" Offset="0" />
+            <GradientStop Color="#102B65" Offset="0.45" />
+            <GradientStop Color="#0A1C48" Offset="1" />
+        </RadialGradientBrush>
+    </Window.Background>
+    <Window.Resources>
+        <SolidColorBrush x:Key="Text" Color="#F3F8FF" />
+        <SolidColorBrush x:Key="Muted" Color="#B9CDEA" />
+        <SolidColorBrush x:Key="PendingText" Color="#B3C9EE" />
+        <SolidColorBrush x:Key="Accent" Color="#8AD9FF" />
+        <SolidColorBrush x:Key="AccentInk" Color="#10244B" />
+        <SolidColorBrush x:Key="Stroke" Color="#2E5897" />
+        <SolidColorBrush x:Key="ControlFill" Color="#1B417B" />
+        <SolidColorBrush x:Key="ControlBorder" Color="#386299" />
+        <SolidColorBrush x:Key="SelectedFill" Color="#214F89" />
+        <SolidColorBrush x:Key="SelectedBorder" Color="#4B8CCA" />
+        <SolidColorBrush x:Key="SelectedLesson" Color="#1A427A" />
+        <SolidColorBrush x:Key="Recess" Color="#102653" />
+        <SolidColorBrush x:Key="Deck" Color="#0E234C" />
+        <LinearGradientBrush x:Key="CardFill" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#194681" Offset="0" />
+            <GradientStop Color="#13366C" Offset="0.46" />
+            <GradientStop Color="#102B5B" Offset="1" />
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="PrimaryFill" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#97E5FF" Offset="0" />
+            <GradientStop Color="#8CB8FF" Offset="0.67" />
+            <GradientStop Color="#B0AAFF" Offset="1" />
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="ProgressFill" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#75D9FF" Offset="0" />
+            <GradientStop Color="#998EFF" Offset="1" />
+        </LinearGradientBrush>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource Text}" />
+        </Style>
+        <Style TargetType="ScrollBar">
+            <Setter Property="Width" Value="9" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid Background="#102755">
+                            <Track x:Name="PART_Track" IsDirectionReversed="True">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.PageUpCommand" Focusable="False">
+                                        <RepeatButton.Template><ControlTemplate TargetType="RepeatButton"><Border Background="Transparent" /></ControlTemplate></RepeatButton.Template>
+                                    </RepeatButton>
+                                </Track.DecreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb>
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="Thumb">
+                                                <Border x:Name="ThumbSurface" Background="#3C639E" CornerRadius="3" Margin="2,1" />
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="ThumbSurface" Property="Background" Value="#6397D9" /></Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.PageDownCommand" Focusable="False">
+                                        <RepeatButton.Template><ControlTemplate TargetType="RepeatButton"><Border Background="Transparent" /></ControlTemplate></RepeatButton.Template>
+                                    </RepeatButton>
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="Button" x:Key="FlatButton">
+            <Setter Property="Foreground" Value="{StaticResource Text}" />
+            <Setter Property="Background" Value="{StaticResource ControlFill}" />
+            <Setter Property="BorderBrush" Value="{StaticResource ControlBorder}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="14,7" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Surface" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" RecognizesAccessKey="True" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Surface" Property="Opacity" Value="0.83" /></Trigger>
+                            <Trigger Property="IsPressed" Value="True"><Setter TargetName="Surface" Property="Opacity" Value="0.67" /></Trigger>
+                            <Trigger Property="IsEnabled" Value="False"><Setter TargetName="Surface" Property="Opacity" Value="0.44" /></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="Button" x:Key="TabButton" BasedOn="{StaticResource FlatButton}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Padding" Value="12,6" />
+            <Setter Property="FontSize" Value="13" />
+        </Style>
+        <Style TargetType="ToggleButton" x:Key="GuideToggle">
+            <Setter Property="Width" Value="35" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Foreground" Value="{StaticResource Muted}" />
+            <Setter Property="Background" Value="{StaticResource Recess}" />
+            <Setter Property="BorderBrush" Value="{StaticResource Stroke}" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="Surface" CornerRadius="7" BorderThickness="1" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}">
+                            <Grid Width="20" Height="20">
+                                <ContentPresenter x:Name="Glyph" Opacity="0.6" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                <Path x:Name="OffMark" Data="M 3,3 L 17,17" Stroke="{TemplateBinding Foreground}" StrokeThickness="1.5"
+                                      StrokeStartLineCap="Round" StrokeEndLineCap="Round" IsHitTestVisible="False" />
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Glyph" Property="Opacity" Value="1" />
+                                <Setter TargetName="OffMark" Property="Visibility" Value="Collapsed" />
+                                <Setter Property="Foreground" Value="{StaticResource Accent}" />
+                                <Setter Property="Background" Value="{StaticResource SelectedFill}" />
+                                <Setter Property="BorderBrush" Value="{StaticResource SelectedBorder}" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Surface" Property="BorderBrush" Value="{StaticResource Accent}" /></Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Surface" Property="BorderBrush" Value="{StaticResource Accent}" /></Trigger>
+                            <Trigger Property="IsEnabled" Value="False"><Setter TargetName="Surface" Property="Opacity" Value="0.7" /></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="MetricLabel">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Foreground" Value="{StaticResource Muted}" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style TargetType="TextBlock" x:Key="MetricValue">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,1,0,0" />
+        </Style>
+        <Style TargetType="Border" x:Key="MetricCard">
+            <Setter Property="Background" Value="{StaticResource CardFill}" />
+            <Setter Property="BorderBrush" Value="{StaticResource Stroke}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="11" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+            <Setter Property="Padding" Value="12,7" />
+        </Style>
+        <Style x:Key="ReportCell" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="Margin" Value="8,0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        </Style>
+        <Style x:Key="ReportContext" TargetType="TextBlock" BasedOn="{StaticResource ReportCell}">
+            <Setter Property="FontFamily" Value="Consolas" />
+            <Setter Property="ToolTip" Value="{Binding Context}" />
+        </Style>
+    </Window.Resources>
+
+    <Grid x:Name="Root" Focusable="True" FocusVisualStyle="{x:Null}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="66" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="35" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" BorderBrush="{StaticResource Stroke}" BorderThickness="0,0,0,1">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#142C68" Offset="0" />
+                    <GradientStop Color="#13366F" Offset="0.6" />
+                    <GradientStop Color="#102B60" Offset="1" />
+                </LinearGradientBrush>
+            </Border.Background>
+            <Grid Margin="22,0,23,0">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Image x:Name="BrandIcon" Width="46" Height="46" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+                    <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="Ритм" FontSize="24" FontWeight="Bold" LineHeight="25" LineStackingStrategy="BlockLineHeight" />
+                        <TextBlock Text="Тренажёр слепой печати" Foreground="{StaticResource Muted}" FontSize="12" />
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <TextBlock Text="Раскладка" Foreground="{StaticResource Muted}" VerticalAlignment="Center" Margin="0,0,9,0" FontSize="12" />
+                    <Border Background="{StaticResource Recess}" BorderBrush="{StaticResource Stroke}" BorderThickness="1" CornerRadius="10" Padding="3">
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="RussianTab" Style="{StaticResource TabButton}" Content="Русская" />
+                            <Button x:Name="EnglishTab" Style="{StaticResource TabButton}" Content="Английская" ToolTip="США · QWERTY" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="239" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+            <Border BorderBrush="{StaticResource Stroke}" BorderThickness="0,0,1,0">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#102C64" Offset="0" />
+                        <GradientStop Color="#0B204E" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <DockPanel Margin="15,14,12,13" LastChildFill="True">
+                    <StackPanel DockPanel.Dock="Top" Margin="0,0,6,5">
+                        <Button x:Name="FreeButton" Style="{StaticResource FlatButton}" Content="Свободная практика"
+                                Margin="0,0,0,12" HorizontalContentAlignment="Left" Padding="11,7" />
+                        <TextBlock Text="Разделы курса" FontSize="16" FontWeight="SemiBold" Margin="5,0,0,7" />
+                        <Border Background="{StaticResource Recess}" BorderBrush="{StaticResource Stroke}" BorderThickness="1"
+                                CornerRadius="9" Padding="3" Margin="0,0,0,10">
+                            <UniformGrid Columns="2">
+                                <Button x:Name="LettersSection" Content="Буквы" Style="{StaticResource TabButton}" FontSize="12" Padding="4,5" Margin="0,0,2,2" />
+                                <Button x:Name="WordsSection" Content="Слова" Style="{StaticResource TabButton}" FontSize="12" Padding="4,5" Margin="0,0,0,2" />
+                                <Button x:Name="SymbolsSection" Content="Цифры и знаки" Style="{StaticResource TabButton}" FontSize="12" Padding="4,5" Margin="0,0,2,0" />
+                                <Button x:Name="TextsSection" Content="Тексты" Style="{StaticResource TabButton}" FontSize="12" Padding="4,5" />
+                            </UniformGrid>
+                        </Border>
+                        <Grid Margin="5,0,3,0">
+                            <TextBlock Text="Уроки раздела" FontWeight="SemiBold" FontSize="13" />
+                            <TextBlock x:Name="SectionCount" HorizontalAlignment="Right" Foreground="{StaticResource Muted}" FontSize="12" VerticalAlignment="Center" />
+                        </Grid>
+                    </StackPanel>
+                    <Border DockPanel.Dock="Bottom" Background="{StaticResource CardFill}" BorderBrush="{StaticResource Stroke}" BorderThickness="1" CornerRadius="11" Padding="11,9" Margin="0,8,6,0">
+                            <StackPanel>
+                                <Grid>
+                                    <TextBlock Text="Пройдено уроков" Foreground="{StaticResource Muted}" FontSize="12" />
+                                    <TextBlock x:Name="CourseCount" Foreground="{StaticResource Accent}" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Right" />
+                                </Grid>
+                                <Grid Height="4" Margin="0,7,0,6">
+                                    <Border Background="{StaticResource Recess}" CornerRadius="2" />
+                                    <Border x:Name="CourseMeter" Background="{StaticResource ProgressFill}" CornerRadius="2" Width="0" HorizontalAlignment="Left" />
+                                </Grid>
+                                <TextBlock x:Name="PersonalBest" Foreground="{StaticResource Muted}" FontSize="12" />
+                            </StackPanel>
+                    </Border>
+                    <ScrollViewer x:Name="LessonScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel x:Name="LessonList" Margin="0,0,5,0" />
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
+
+            <ScrollViewer Grid.Column="1" x:Name="MainScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel x:Name="MainContent" Margin="24,18,24,17" MaxWidth="1100">
+                    <Grid Margin="0,0,0,9">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock x:Name="LessonNumber" Foreground="{StaticResource Accent}" FontWeight="SemiBold" FontSize="11" />
+                            <TextBlock x:Name="LessonTitle" FontSize="30" FontWeight="Bold" Margin="0,1,8,0" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <Border Grid.Column="1" x:Name="SessionTabs" Background="{StaticResource Recess}" BorderBrush="{StaticResource Stroke}" BorderThickness="1" CornerRadius="10" Padding="3"
+                                VerticalAlignment="Bottom" Margin="0,0,0,3">
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="PracticeTab" Style="{StaticResource TabButton}" Content="Тренировка" />
+                                <Button x:Name="DemoTab" Style="{StaticResource TabButton}" Content="Демонстрация" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Border Background="{StaticResource CardFill}" BorderBrush="#3B70B2" BorderThickness="1" CornerRadius="16" Padding="15,12" Margin="0,0,0,11">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <StackPanel x:Name="ModeRow" Orientation="Horizontal">
+                                    <TextBlock Text="Режим" Foreground="{StaticResource Muted}" FontSize="12" VerticalAlignment="Center" Margin="0,0,10,0" />
+                                    <Border Background="{StaticResource Recess}" BorderBrush="{StaticResource Stroke}" BorderThickness="1" CornerRadius="9" Padding="2">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button x:Name="LessonMode" Style="{StaticResource TabButton}" Content="Подборка" Padding="9,3" />
+                                            <Button x:Name="UnlimitedMode" Style="{StaticResource TabButton}" Content="Без лимита" Padding="9,3" />
+                                            <Button x:Name="FiveMode" Style="{StaticResource TabButton}" Content="5 минут" Padding="9,3" />
+                                            <Button x:Name="TenMode" Style="{StaticResource TabButton}" Content="10 минут" Padding="9,3" />
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                                <StackPanel x:Name="GuideToggles" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                    <ToggleButton x:Name="KeyboardToggle" Style="{StaticResource GuideToggle}" Margin="0,0,4,0" AutomationProperties.Name="Экранная клавиатура" ToolTipService.ShowOnDisabled="True">
+                                        <Path Width="20" Height="20" Data="M 3,5 H 17 Q 18,5 18,6 V 14 Q 18,15 17,15 H 3 Q 2,15 2,14 V 6 Q 2,5 3,5 Z M 5,8 H 6 M 9.5,8 H 10.5 M 14,8 H 15 M 5,12 H 6 M 9,12 H 15"
+                                              Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}" StrokeThickness="1.4" StrokeStartLineCap="Round" StrokeEndLineCap="Round" />
+                                    </ToggleButton>
+                                    <ToggleButton x:Name="FingersToggle" Style="{StaticResource GuideToggle}" Margin="0,0,4,0" AutomationProperties.Name="Подсказки по пальцам" ToolTipService.ShowOnDisabled="True">
+                                        <Path Width="20" Height="20" Data="M 7,18 C 5.5,16 4,14 3,12.5 C 2.4,11.2 3.5,10.4 4.5,11 L 6.5,12.5 V 5 C 6.5,3.2 9,3.2 9,5 V 9 M 9,8 V 3.5 C 9,1.9 11.5,1.9 11.5,3.5 V 9 M 11.5,8 V 4.5 C 11.5,2.9 14,2.9 14,4.5 V 9.5 M 14,8 V 6.7 C 14,5 16.5,5 16.5,6.7 V 11.5 C 16.5,14 15.3,16 14,18 Z"
+                                              Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}" StrokeThickness="1.3" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" />
+                                    </ToggleButton>
+                                    <ToggleButton x:Name="WaitAfterError" Style="{StaticResource GuideToggle}" Margin="0,0,4,0" IsChecked="True"
+                                                  AutomationProperties.Name="После ошибки тренажёр ждёт правильного знака" ToolTipService.ShowOnDisabled="True">
+                                        <Path Width="20" Height="20" Data="M 3,9.5 H 15.5 M 11,5 L 15.5,9.5 L 11,14 M 17,5 V 14"
+                                              Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}" StrokeThickness="1.4"
+                                              StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" />
+                                    </ToggleButton>
+                                    <ToggleButton x:Name="AudioToggle" Style="{StaticResource GuideToggle}" AutomationProperties.Name="Озвучка текста">
+                                        <Path Width="20" Height="20" Data="M 3,7 H 6 L 10,4 V 16 L 6,13 H 3 Z M 12.8,7 C 14.4,8.6 14.4,11.4 12.8,13 M 15,5 C 17.8,7.7 17.8,12.3 15,15"
+                                              Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}" StrokeThickness="1.4"
+                                              StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" />
+                                    </ToggleButton>
+                                </StackPanel>
+                            </Grid>
+                            <StackPanel x:Name="PracticeDetails">
+                                <Grid Margin="0,0,0,7">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                    <TextBlock x:Name="PassageLabel" Text="Упражнение" FontWeight="SemiBold" VerticalAlignment="Center" />
+                                    <Button Grid.Column="1" x:Name="RepeatSentence" Style="{StaticResource FlatButton}" Content="Повторить отрывок · F4"
+                                            Padding="8,3" FontSize="12" Margin="0,0,10,0" />
+                                    <TextBlock Grid.Column="2" x:Name="PositionLabel" Foreground="{StaticResource Muted}" FontSize="12" VerticalAlignment="Center" />
+                                </Grid>
+                                <Grid Height="3" Margin="0,0,0,8">
+                                    <Border Background="#10244F" CornerRadius="2" />
+                                    <Border x:Name="ExerciseMeter" Background="{StaticResource ProgressFill}" CornerRadius="2" Width="0" HorizontalAlignment="Left" />
+                                </Grid>
+                                <Border Background="{StaticResource Deck}" BorderBrush="#315B97" BorderThickness="1" CornerRadius="10" Padding="9,6" MinHeight="72">
+                                    <StackPanel x:Name="PassageBox" AutomationProperties.Name="Текст упражнения" />
+                                </Border>
+                            </StackPanel>
+                            <Grid x:Name="SessionActionRow" Margin="0,9,0,0">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <TextBlock x:Name="StatusLabel" Foreground="{StaticResource Muted}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,10,0" AutomationProperties.LiveSetting="Polite" />
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Button x:Name="ResetButton" Style="{StaticResource FlatButton}" Margin="0,0,7,0" />
+                                    <Button x:Name="FinishButton" Style="{StaticResource FlatButton}" Content="Завершить" Margin="0,0,7,0" Visibility="Collapsed" />
+                                    <Button x:Name="ActionButton" Style="{StaticResource FlatButton}" Background="{StaticResource PrimaryFill}"
+                                            BorderBrush="#A4D5FF" Foreground="{StaticResource AccentInk}" MinWidth="132" />
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <UniformGrid Columns="4" Margin="0,0,-8,11">
+                        <Border Style="{StaticResource MetricCard}"><StackPanel><TextBlock Text="СКОРОСТЬ · ЗН/МИН" Style="{StaticResource MetricLabel}" /><TextBlock x:Name="SpeedValue" Style="{StaticResource MetricValue}" /></StackPanel></Border>
+                        <Border Style="{StaticResource MetricCard}"><StackPanel><TextBlock Text="ТОЧНОСТЬ" Style="{StaticResource MetricLabel}" /><TextBlock x:Name="AccuracyValue" Style="{StaticResource MetricValue}" /></StackPanel></Border>
+                        <Border Style="{StaticResource MetricCard}"><StackPanel><TextBlock Text="ОШИБКИ" Style="{StaticResource MetricLabel}" /><TextBlock x:Name="MistakesValue" Style="{StaticResource MetricValue}" /></StackPanel></Border>
+                        <Border Style="{StaticResource MetricCard}"><StackPanel><TextBlock x:Name="TimeLabel" Text="ВРЕМЯ" Style="{StaticResource MetricLabel}" /><TextBlock x:Name="TimeValue" Style="{StaticResource MetricValue}" /></StackPanel></Border>
+                    </UniformGrid>
+
+                    <Border x:Name="ReportPanel" Visibility="Collapsed" Background="{StaticResource CardFill}" BorderBrush="#3B70B2"
+                            BorderThickness="1" CornerRadius="16" Padding="15,12">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <StackPanel Margin="0,0,8,0">
+                                    <TextBlock Text="Отчёт об ошибках" FontWeight="SemiBold" FontSize="20" />
+                                    <TextBlock x:Name="ReportSummary" Foreground="{StaticResource Muted}" FontSize="12" Margin="0,3,0,0" />
+                                </StackPanel>
+                                <Button x:Name="ExportButton" Grid.Column="1" Style="{StaticResource FlatButton}" Content="Сохранить .md" VerticalAlignment="Center" />
+                            </Grid>
+                            <Border Background="{StaticResource Recess}" BorderBrush="{StaticResource Stroke}" BorderThickness="1" CornerRadius="9" Padding="10,7" Margin="0,0,0,11">
+                                <StackPanel>
+                                    <TextBlock Text="Что потренировать" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,3" />
+                                    <TextBlock x:Name="ReportRecommendations" Foreground="{StaticResource Muted}" TextWrapping="Wrap" FontSize="13" />
+                                </StackPanel>
+                            </Border>
+                            <StackPanel x:Name="ReportErrors">
+                                <TextBlock Text="Фрагмент и позиция считаются с 1. Знак в скобках ожидался при наборе, ␣ означает пробел."
+                                           Foreground="{StaticResource Muted}" FontSize="12" Margin="0,0,0,7" TextWrapping="Wrap" />
+                                <DataGrid x:Name="MistakeTable" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False"
+                                          CanUserResizeRows="False" CanUserReorderColumns="False" CanUserSortColumns="False" MaxHeight="278" RowHeight="29"
+                                          HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#284775"
+                                          BorderBrush="{StaticResource Stroke}" BorderThickness="1" Background="{StaticResource Deck}"
+                                          RowBackground="{StaticResource Deck}" AlternatingRowBackground="{StaticResource Recess}" AlternationCount="2"
+                                          Foreground="{StaticResource Text}" SelectionMode="Single" SelectionUnit="FullRow"
+                                          ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                          AutomationProperties.Name="Список ошибок набора">
+                                    <DataGrid.ColumnHeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="Background" Value="{StaticResource ControlFill}" />
+                                            <Setter Property="Foreground" Value="{StaticResource Text}" />
+                                            <Setter Property="FontWeight" Value="SemiBold" />
+                                            <Setter Property="FontSize" Value="12" />
+                                            <Setter Property="Padding" Value="8,6" />
+                                        </Style>
+                                    </DataGrid.ColumnHeaderStyle>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Фрагмент · знак" Binding="{Binding Location}" Width="117" ElementStyle="{StaticResource ReportCell}" />
+                                        <DataGridTextColumn Header="Ожидалось" Binding="{Binding ExpectedLabel}" Width="92" ElementStyle="{StaticResource ReportCell}" />
+                                        <DataGridTextColumn Header="Введено" Binding="{Binding EnteredLabel}" Width="88" ElementStyle="{StaticResource ReportCell}" />
+                                        <DataGridTextColumn Header="Контекст" Binding="{Binding Context}" Width="*" ElementStyle="{StaticResource ReportContext}" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                            <TextBlock x:Name="ExportStatus" Visibility="Collapsed" Foreground="{StaticResource Accent}" FontSize="12"
+                                       TextWrapping="Wrap" Margin="0,8,0,0" AutomationProperties.LiveSetting="Polite" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border x:Name="KeyboardPanel" Background="{StaticResource CardFill}" BorderBrush="#3B70B2" BorderThickness="1" CornerRadius="16" Padding="13,9,13,10">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <TextBlock x:Name="GuideTitle" Text="Клавиатура и пальцы" FontWeight="SemiBold" FontSize="15" VerticalAlignment="Center" />
+                                <Button Grid.Column="1" x:Name="HomePositionButton" Style="{StaticResource FlatButton}" FontSize="12" Padding="9,4"
+                                        Content="Исходная позиция" ToolTip="Показать, куда положить пальцы перед набором" />
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition x:Name="GuideGap" Width="9" />
+                                    <ColumnDefinition x:Name="HandsColumn" Width="210" />
+                                </Grid.ColumnDefinitions>
+                                <Border x:Name="KeyboardDeck" Background="{StaticResource Deck}" BorderBrush="{StaticResource Stroke}" BorderThickness="1" CornerRadius="10" Padding="7,7,7,5">
+                                    <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Center">
+                                        <StackPanel x:Name="KeyboardBox" Width="744" IsHitTestVisible="False" />
+                                    </Viewbox>
+                                </Border>
+                                <Border x:Name="HandsPanel" Grid.Column="2" Background="{StaticResource Deck}" BorderBrush="{StaticResource Stroke}" BorderThickness="1"
+                                        CornerRadius="10" Padding="6,5" AutomationProperties.Name="Схема исходного положения рук"
+                                        ToolTip="Буквы на пальцах показывают исходные клавиши">
+                                    <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <UniformGrid Columns="2" Width="188">
+                                            <StackPanel>
+                                                <Canvas x:Name="LeftHand" Width="94" Height="104" IsHitTestVisible="False" />
+                                                <TextBlock Text="ЛЕВАЯ" Foreground="{StaticResource Muted}" FontSize="10" FontWeight="SemiBold"
+                                                           HorizontalAlignment="Center" Margin="0,3,0,0" />
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <Canvas x:Name="RightHand" Width="94" Height="104" IsHitTestVisible="False" />
+                                                <TextBlock Text="ПРАВАЯ" Foreground="{StaticResource Muted}" FontSize="10" FontWeight="SemiBold"
+                                                           HorizontalAlignment="Center" Margin="0,3,0,0" />
+                                            </StackPanel>
+                                        </UniformGrid>
+                                    </Viewbox>
+                                </Border>
+                            </Grid>
+                            <TextBlock x:Name="FingerLabel" Foreground="{StaticResource Accent}" FontSize="12" FontWeight="SemiBold"
+                                       TextWrapping="Wrap" HorizontalAlignment="Center" TextAlignment="Center" Margin="0,5,0,0" />
+                            <TextBlock x:Name="Instruction" Margin="0,6,0,0" Foreground="{StaticResource Muted}" FontSize="12" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <Border Grid.Row="2" Background="#0D2455" BorderBrush="{StaticResource Stroke}" BorderThickness="0,1,0,0">
+            <Grid Margin="22,0">
+                <TextBlock Foreground="{StaticResource Muted}" FontSize="12" VerticalAlignment="Center">
+                    <Run Foreground="{StaticResource Text}" Text="Пробел" /><Run Text="  старт или продолжение      " />
+                    <Run Foreground="{StaticResource Text}" Text="Esc" /><Run Text="  пауза" />
+                </TextBlock>
+                <TextBlock x:Name="FooterVersion" HorizontalAlignment="Center" Foreground="{StaticResource Muted}" FontSize="12" VerticalAlignment="Center" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <TextBlock x:Name="FooterStatus" Foreground="{StaticResource Muted}" FontSize="12" VerticalAlignment="Center" />
+                    <Border Width="1" Height="13" Background="{StaticResource Stroke}" Margin="12,0" />
+                    <TextBlock x:Name="FooterAuthor" Text="Автор: Ивасик" Foreground="{StaticResource Text}" FontSize="12" VerticalAlignment="Center" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
